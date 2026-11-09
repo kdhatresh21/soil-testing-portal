@@ -71,6 +71,16 @@ app.config["SQLALCHEMY_DATABASE_URI"] = URL.create(
 )
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+DB_SSL_CA = os.getenv("DB_SSL_CA")
+
+if DB_SSL_CA:
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+        "connect_args": {
+            "ssl": {"ca": DB_SSL_CA},
+            "ssl_verify_cert": True,
+            "ssl_verify_identity": True,
+        }
+    }
 
 db = SQLAlchemy(app)
 app.jinja_env.globals["timedelta"] = timedelta
