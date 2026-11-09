@@ -708,6 +708,13 @@ def cancel_appointment(appointment_id):
         appt.status = "Cancelled"
         db.session.commit()
 
+        create_notification(
+            current_user.id,
+            "Appointment Cancelled",
+            f"Your appointment has been cancelled. "
+            f"Sample ID: {appt.sample_id}."
+        )
+
         send_email(
             current_user.email,
             "Soil Testing Appointment Cancelled",
