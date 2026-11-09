@@ -83,7 +83,7 @@ if DB_SSL_CA:
             "ssl_verify_identity": True,
         }
     }
-    
+
 db = SQLAlchemy(app)
 app.jinja_env.globals["timedelta"] = timedelta
 
@@ -575,13 +575,12 @@ def new_appointment():
             )
 
         valid_slots = {
-            "09:00â€“10:00",
-            "10:00â€“11:00",
-            "11:00â€“12:00",
-            "14:00â€“15:00",
-            "15:00â€“16:00",
+            "09:00–10:00",
+            "10:00–11:00",
+            "11:00–12:00",
+            "14:00–15:00",
+            "15:00–16:00",
         }
-
         if (
             appointment_date < date.today()
             or not location
