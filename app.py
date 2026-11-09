@@ -96,47 +96,62 @@ login_manager.login_message_category = "warning"
 # EMAIL NOTIFICATION SERVICE
 # --------------------------------------------------
 
-def send_email(to_email, subject, message_text):
 
-    """Send an email using Gmail SMTP and log diagnostic results."""
+def send_email(to_email, subject, message_text):
+    """Send an email using the Brevo HTTPS API."""
+
+    import json
+    import urllib.request
+    import urllib.error
 
     sender = os.getenv("SMTP_EMAIL")
-    password = os.getenv("SMTP_APP_PASSWORD")
+    api_key = os.getenv("BREVO_API_KEY")
 
-    # Temporary diagnostic messages. Never print the password.
-
-
-    if not sender or not password or not to_email:
+    if not sender or not api_key or not to_email:
         logger.warning(
-            "Email skipped: sender, app password, or recipient missing."
+            "Email skipped: sender, API key, or recipient missing."
         )
         return False
 
-    message = EmailMessage()
-    message["Subject"] = subject
-    message["From"] = sender
-    message["To"] = to_email
-    message.set_content(message_text)
+    payload = {
+        "sender": {
+            "name": "Soil Testing Portal",
+            "email": sender
+        },
+        "to": [
+            {"email": to_email}
+        ],
+        "subject": subject,
+        "textContent": message_text
+    }
 
     try:
-        logger.info("Connecting to Gmail SMTP server...")
+        data = json.dumps(payload).encode("utf-8")
 
-        with smtplib.SMTP(
-            "smtp.gmail.com", 587, timeout=20
-        ) as server:
-            server.starttls()
-            logger.info("Gmail TLS connection established.")
+        req = urllib.request.Request(
+            "https://api.brevo.com/v3/smtp/email",
+            data=data,
+            headers={
+                "accept": "application/json",
+                "api-key": api_key,
+                "content-type": "application/json"
+            },
+            method="POST"
+        )
 
-            server.login(sender, password)
-            logger.info("Gmail authentication successful.")
+        logger.info("Sending email through Brevo API...")
 
-            server.send_message(message)
+        with urllib.request.urlopen(req, timeout=20) as response:
+            logger.info(
+                "Brevo email API response: %s",
+                response.status
+            )
 
         logger.info("Email sent successfully to %s", to_email)
         return True
 
     except Exception:
-        logger.exception("Email notification failed.")
+        logger.exception("Brevo email notification failed.")
         return False
 
 
