@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SoilCare Portal{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark portal-nav">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">🌱 SoilCare Portal</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navmenu">
+      <div class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        {% if current_user.is_authenticated %}
+          <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+          {% if current_user.role == 'farmer' %}<a class="nav-link" href="{{ url_for('new_appointment') }}">Book appointment</a>{% endif %}
+          {% if current_user.role in ['admin', 'lab_staff'] %}<a class="nav-link" href="{{ url_for('admin_dashboard') }}">Admin / Lab</a>{% endif %}
+          <span class="navbar-text small me-lg-2">{{ current_user.full_name }}</span>
+          <form method="post" action="{{ url_for('logout') }}" class="d-inline">
+		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-sm btn-outline-light" type="submit">Log out</button>
+          </form>
+        {% else %}
+          <a class="nav-link" href="{{ url_for('login') }}">Log in</a>
+          <a class="btn btn-sm btn-light text-success fw-semibold" href="{{ url_for('register') }}">Farmer registration</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="container py-4 py-lg-5">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="py-4 mt-auto">
+  <div class="container small text-muted d-flex flex-column flex-md-row justify-content-between gap-2">
+    <span>SoilCare Portal · Soil testing appointment and report access</span>
+    <span>Academic starter project · Use verified laboratory results</span>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

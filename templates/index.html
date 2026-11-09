@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Home · SoilCare Portal{% endblock %}
+{% block content %}
+<section class="hero rounded-4 p-4 p-lg-5 mb-5">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-7">
+      <span class="eyebrow">SMARTER SOIL · HEALTHIER CROPS</span>
+      <h1 class="display-5 fw-bold mt-3">Know your soil.<br>Grow with confidence.</h1>
+      <p class="lead mt-3 mb-4">Book a soil-testing appointment, follow your sample's progress, and access your digital soil test report in one place.</p>
+      {% if current_user.is_authenticated %}
+        <a class="btn btn-success btn-lg" href="{{ url_for('dashboard') }}">Open dashboard</a>
+      {% else %}
+        <a class="btn btn-success btn-lg me-2 mb-2" href="{{ url_for('register') }}">Get started</a>
+        <a class="btn btn-outline-success btn-lg mb-2" href="{{ url_for('login') }}">Log in</a>
+      {% endif %}
+    </div>
+    <div class="col-lg-5">
+      <div class="soil-illustration">
+        <div class="sun"></div><div class="hill hill-one"></div><div class="hill hill-two"></div>
+        <div class="plant plant-one">🌱</div><div class="plant plant-two">🌾</div><div class="plant plant-three">🌿</div>
+        <div class="soil-label">Healthy soil starts with testing</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="row g-4 mb-5">
+  <div class="col-md-4"><div class="feature-card h-100"><div class="feature-icon">📅</div><h2 class="h5">Book a slot</h2><p class="text-muted mb-0">Choose an available lab appointment and receive a unique sample reference.</p></div></div>
+  <div class="col-md-4"><div class="feature-card h-100"><div class="feature-icon">🧪</div><h2 class="h5">Track your sample</h2><p class="text-muted mb-0">Follow the progress from booking to sample receipt and laboratory testing.</p></div></div>
+  <div class="col-md-4"><div class="feature-card h-100"><div class="feature-icon">📄</div><h2 class="h5">Access your report</h2><p class="text-muted mb-0">View approved soil results and print or save the report as a PDF.</p></div></div>
+</div>
+<div class="callout rounded-4 p-4">
+  <h2 class="h5">What can a soil test tell you?</h2>
+  <p class="mb-0 text-muted">Depending on the laboratory package, reports may include soil pH, electrical conductivity, organic carbon, nitrogen, phosphorus, potassium and other tested parameters. Follow recommendations reviewed by qualified agricultural professionals.</p>
+</div>
+{% endblock %}

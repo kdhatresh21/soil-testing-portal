@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block title %}Book appointment · SoilCare Portal{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-lg-8">
+  <a class="small text-decoration-none" href="{{ url_for('dashboard') }}">← Back to dashboard</a>
+  <div class="mt-3 mb-4"><span class="eyebrow">NEW BOOKING</span><h1 class="h2 fw-bold mt-2">Book a soil-testing appointment</h1><p class="text-muted">Provide the farm details and choose your preferred slot.</p></div>
+  <form method="post" class="form-card">
+	<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <h2 class="h5 mb-3">Farm information</h2>
+    <div class="mb-3"><label class="form-label" for="farm_location">Farm location (village, district)</label><input class="form-control" id="farm_location" name="farm_location" required maxlength="255" placeholder="e.g., Village, District, State"></div>
+    <div class="row g-3">
+      <div class="col-md-6"><label class="form-label" for="land_area_acres">Land area (acres, optional)</label><input class="form-control" id="land_area_acres" name="land_area_acres" type="number" min="0.01" step="0.01"></div>
+      <div class="col-md-6"><label class="form-label" for="crop_name">Current / intended crop</label><input class="form-control" id="crop_name" name="crop_name" required maxlength="120" placeholder="e.g., rice, cotton"></div>
+    </div>
+    <hr class="my-4">
+    <h2 class="h5 mb-3">Laboratory and appointment</h2>
+    <div class="mb-3"><label class="form-label" for="lab_name">Laboratory / collection centre</label><select class="form-select" id="lab_name" name="lab_name" required><option>Central Soil Testing Laboratory</option><option>District Soil Testing Centre</option><option>University Soil Testing Laboratory</option></select><div class="form-text">Demo options only; configure real centres before deployment.</div></div>
+    <div class="row g-3">
+      <div class="col-md-6"><label class="form-label" for="appointment_date">Preferred date</label><input class="form-control" id="appointment_date" name="appointment_date" type="date" min="{{ min_date }}" required></div>
+      <div class="col-md-6"><label class="form-label" for="time_slot">Available time slot</label><select class="form-select" id="time_slot" name="time_slot" required><option value="">Select a slot</option><option>09:00–10:00</option><option>10:00–11:00</option><option>11:00–12:00</option><option>14:00–15:00</option><option>15:00–16:00</option></select></div>
+    </div>
+    <div class="mt-3 mb-4"><label class="form-label" for="notes">Notes for laboratory (optional)</label><textarea class="form-control" id="notes" name="notes" rows="3" maxlength="2000" placeholder="Any useful information about the farm or sample"></textarea></div>
+    <div class="callout rounded-3 p-3 mb-4 small">After booking, keep your sample reference. Confirm sample collection and submission instructions with your laboratory.</div>
+    <div class="d-flex gap-2"><button class="btn btn-success btn-lg" type="submit">Confirm appointment</button><a class="btn btn-outline-secondary btn-lg" href="{{ url_for('dashboard') }}">Cancel</a></div>
+  </form>
+</div></div>
+{% endblock %}

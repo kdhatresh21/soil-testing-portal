@@ -1,0 +1,48 @@
+{% extends "base.html" %}{% block title %}Farmer dashboard · SoilCare Portal{% endblock %}
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <div><span class="eyebrow">FARMER WORKSPACE</span><h1 class="h2 fw-bold mt-2 mb-1">Hello, {{ current_user.full_name }}</h1><p class="text-muted mb-0">Manage your appointments and access approved reports.</p></div>
+  <a class="btn btn-outline-success position-relative"
+   href="{{ url_for('notifications') }}">
+    <i class="bi bi-bell"></i> My Notifications
+
+    {% if unread_count > 0 %}
+        <span class="badge bg-danger ms-1">
+            {{ unread_count }}
+        </span>
+    {% endif %}
+</a>
+<a class="btn btn-success" href="{{ url_for('new_appointment') }}">＋ Book soil test</a>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="metric-card"><span class="text-muted small">Total appointments</span><div class="metric-number">{{ appointments|length }}</div></div></div>
+  <div class="col-md-4"><div class="metric-card"><span class="text-muted small">In progress</span><div class="metric-number">{{ appointments|selectattr('status', 'in', ['Booked','Confirmed','Sample received','Testing in progress'])|list|length }}</div></div></div>
+  <div class="col-md-4"><div class="metric-card"><span class="text-muted small">Reports available</span><div class="metric-number">{{ appointments|selectattr('report')|selectattr('report.approved')|list|length }}</div></div></div>
+</div>
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-body p-0">
+    <div class="p-4 border-bottom"><h2 class="h5 mb-0">Your appointments</h2></div>
+    {% if appointments %}
+    <div class="table-responsive"><table class="table align-middle mb-0">
+      <thead><tr><th class="ps-4">Sample reference</th><th>Date & time</th><th>Crop / farm</th><th>Status</th><th class="pe-4">Action</th></tr></thead>
+      <tbody>{% for appt in appointments %}
+      <tr>
+        <td class="ps-4"><span class="fw-semibold">{{ appt.sample_id }}</span><div class="small text-muted">{{ appt.lab_name }}</div></td>
+        <td>{{ appt.appointment_date.strftime('%d %b %Y') }}<div class="small text-muted">{{ appt.time_slot }}</div></td>
+        <td>{{ appt.crop_name }}<div class="small text-muted">{{ appt.farm_location }}</div></td>
+        <td><span class="status-pill">{{ appt.status }}</span></td>
+        <td class="pe-4">
+          {% if appt.report and appt.report.approved %}<a class="btn btn-sm btn-outline-success" href="{{ url_for('view_report', report_id=appt.report.id) }}">View report</a>
+          {% elif appt.status in ['Booked','Confirmed'] %}
+          <form method="post" action="{{ url_for('cancel_appointment', appointment_id=appt.id) }}" onsubmit="return confirm('Cancel this appointment?')">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-outline-danger" type="submit">Cancel</button></form>
+          {% else %}<span class="small text-muted">No report yet</span>{% endif %}
+        </td>
+      </tr>{% endfor %}</tbody>
+    </table></div>
+    {% else %}
+    <div class="empty-state"><div class="feature-icon">🧑‍🌾</div><h3 class="h5">No appointments yet</h3><p class="text-muted">Book your first soil test to get started.</p><a class="btn btn-success" href="{{ url_for('new_appointment') }}">Book an appointment</a></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

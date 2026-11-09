@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Farmer registration · SoilCare Portal{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <span class="eyebrow">FARMER ACCOUNT</span>
+    <h1 class="h2 fw-bold mt-2">Create your account</h1>
+    <p class="text-muted">Register to book appointments and access your reports.</p>
+
+    <form method="post">
+	<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <div class="mb-3">
+        <label class="form-label" for="full_name">Full name</label>
+        <input class="form-control"
+               id="full_name"
+               name="full_name"
+               maxlength="120"
+               required
+               autocomplete="name">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="email">
+          Email address (optional if using mobile number)
+        </label>
+        <input class="form-control"
+               id="email"
+               name="email"
+               type="email"
+               maxlength="180"
+               autocomplete="email">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="phone">
+          Mobile number (optional if using email)
+        </label>
+        <input class="form-control"
+               id="phone"
+               name="phone"
+               type="tel"
+               maxlength="30"
+               autocomplete="tel">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="password">Password</label>
+
+        <div class="input-group">
+          <input class="form-control"
+                 id="password"
+                 name="password"
+                 type="password"
+                 minlength="8"
+                 required
+                 autocomplete="new-password">
+
+          <button class="btn btn-outline-secondary"
+                  type="button"
+                  onclick="togglePassword('password', this)"
+                  aria-label="Show password">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+
+        <div class="form-text">Use at least 8 characters.</div>
+      </div>
+
+      <button class="btn btn-success btn-lg w-100" type="submit">
+        Create account
+      </button>
+
+    </form>
+
+    <p class="small text-muted mt-4 mb-0">
+      Already registered?
+      <a href="{{ url_for('login') }}">Log in</a>.
+    </p>
+
+  </div>
+</div>
+
+<script>
+function togglePassword(inputId, button) {
+    const password = document.getElementById(inputId);
+    const icon = button.querySelector("i");
+
+    if (password.type === "password") {
+        password.type = "text";
+        icon.classList.replace("bi-eye", "bi-eye-slash");
+        button.setAttribute("aria-label", "Hide password");
+    } else {
+        password.type = "password";
+        icon.classList.replace("bi-eye-slash", "bi-eye");
+        button.setAttribute("aria-label", "Show password");
+    }
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}{% block title %}Soil test report · SoilCare Portal{% endblock %}
+{% block content %}
+<div class="report-toolbar d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+  <div><a class="small text-decoration-none" href="{{ url_for('dashboard') if current_user.role == 'farmer' else url_for('admin_dashboard') }}">← Back</a><div class="eyebrow mt-3">DIGITAL SOIL TEST REPORT</div><h1 class="h2 fw-bold mt-2">Soil health report</h1><p class="text-muted mb-0">Reference: {{ report.appointment.sample_id }}</p></div>
+  <button class="btn btn-success align-self-md-start" onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+<div class="report-paper">
+  <div class="d-flex justify-content-between flex-wrap gap-3 border-bottom pb-4 mb-4">
+    <div><div class="h4 fw-bold mb-1">SoilCare Portal</div><div class="text-muted small">Laboratory report · Verify with the issuing laboratory</div></div>
+    <div class="text-md-end"><span class="badge text-bg-success">Approved / Published</span><div class="small text-muted mt-2">Published: {{ (report.published_at + timedelta(hours=5, minutes=30)).strftime('%d %b %Y, %I:%M %p IST') if report.published_at else '—' }}</div></div>
+  </div>
+  <div class="row g-3 mb-4">
+    <div class="col-md-6"><div class="report-meta"><span>Farmer</span><strong>{{ report.appointment.farmer.full_name }}</strong></div></div>
+    <div class="col-md-6"><div class="report-meta"><span>Farm location</span><strong>{{ report.appointment.farm_location }}</strong></div></div>
+    <div class="col-md-6"><div class="report-meta"><span>Crop</span><strong>{{ report.appointment.crop_name }}</strong></div></div>
+    <div class="col-md-6"><div class="report-meta"><span>Laboratory</span><strong>{{ report.appointment.lab_name }}</strong></div></div>
+    <div class="col-md-6"><div class="report-meta"><span>Sample reference</span><strong>{{ report.appointment.sample_id }}</strong></div></div>
+    <div class="col-md-6"><div class="report-meta"><span>Appointment date</span><strong>{{ report.appointment.appointment_date.strftime('%d %b %Y') }}</strong></div></div>
+  </div>
+  <h2 class="h5 fw-bold mb-3">Test results</h2>
+  <div class="table-responsive"><table class="table table-bordered">
+    <thead class="table-light"><tr><th>Parameter</th><th>Measured value</th><th>Unit / note</th></tr></thead>
+    <tbody>
+      {% for label, value, unit in [('Soil pH', report.ph, 'pH scale'),('Electrical conductivity', report.ec, 'As reported by laboratory'),('Organic carbon', report.organic_carbon, 'As reported by laboratory'),('Available nitrogen', report.nitrogen, 'As reported by laboratory'),('Available phosphorus', report.phosphorus, 'As reported by laboratory'),('Available potassium', report.potassium, 'As reported by laboratory')] %}
+      <tr><td>{{ label }}</td><td>{{ value if value is not none else 'Not entered' }}</td><td>{{ unit }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+  {% if report.other_parameters %}<h2 class="h5 fw-bold mt-4">Other parameters</h2><p class="report-text">{{ report.other_parameters }}</p>{% endif %}
+  <h2 class="h5 fw-bold mt-4">Interpretation</h2><p class="report-text">{{ report.interpretation or 'No interpretation entered.' }}</p>
+  <h2 class="h5 fw-bold mt-4">Recommendations</h2><p class="report-text">{{ report.recommendations or 'No recommendations entered.' }}</p>
+  <div class="alert alert-light border mt-4 small mb-0">This report reflects values entered and approved by authorized laboratory staff. Units, interpretation and recommendations should follow the laboratory's validated methods and applicable agricultural standards.</div>
+</div>
+{% endblock %}

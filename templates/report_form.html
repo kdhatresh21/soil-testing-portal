@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block title %}Enter soil report · SoilCare Portal{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-lg-9">
+  <a class="small text-decoration-none" href="{{ url_for('admin_dashboard') }}">← Back to laboratory dashboard</a>
+  <div class="mt-3 mb-4"><span class="eyebrow">LABORATORY ENTRY</span><h1 class="h2 fw-bold mt-2">Soil test report</h1><p class="text-muted mb-0">{{ appointment.sample_id }} · {{ appointment.farmer.full_name }} · {{ appointment.farm_location }}</p></div>
+  <form method="post" class="form-card">
+	<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <h2 class="h5 mb-3">Measured values</h2>
+    <div class="row g-3">
+      {% for field, label, unit in [('ph','Soil pH','pH scale'),('ec','Electrical conductivity (EC)','as reported by lab'),('organic_carbon','Organic carbon','% or lab unit'),('nitrogen','Available nitrogen','lab unit'),('phosphorus','Available phosphorus','lab unit'),('potassium','Available potassium','lab unit')] %}
+      <div class="col-md-6"><label class="form-label" for="{{ field }}">{{ label }}</label><input class="form-control" id="{{ field }}" name="{{ field }}" type="number" min="0" step="any" value="{{ (report|attr(field)) if report and (report|attr(field)) is not none else '' }}"><div class="form-text">{{ unit }}</div></div>
+      {% endfor %}
+    </div>
+    <div class="mt-4 mb-3"><label class="form-label" for="other_parameters">Other tested parameters</label><textarea class="form-control" id="other_parameters" name="other_parameters" rows="2">{{ report.other_parameters if report else '' }}</textarea></div>
+    <div class="mb-3"><label class="form-label" for="interpretation">Interpretation</label><textarea class="form-control" id="interpretation" name="interpretation" rows="3" placeholder="Explain the results using your laboratory's approved standards.">{{ report.interpretation if report else '' }}</textarea></div>
+    <div class="mb-4"><label class="form-label" for="recommendations">Recommendations</label><textarea class="form-control" id="recommendations" name="recommendations" rows="3" placeholder="Enter reviewed recommendations for the selected crop.">{{ report.recommendations if report else '' }}</textarea></div>
+    <div class="form-check p-3 bg-light rounded-3 mb-4">
+      <input class="form-check-input ms-0 me-2" type="checkbox" name="publish" value="yes" id="publish" {% if report and report.approved %}checked{% endif %}>
+      <label class="form-check-label fw-semibold" for="publish">Publish approved report for the farmer</label>
+      <div class="form-text">Only tick this after verifying the laboratory results and recommendations.</div>
+    </div>
+    <button class="btn btn-success btn-lg" type="submit">Save report</button>
+    <a class="btn btn-outline-secondary btn-lg ms-2" href="{{ url_for('admin_dashboard') }}">Cancel</a>
+  </form>
+</div></div>
+{% endblock %}

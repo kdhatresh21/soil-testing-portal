@@ -1,0 +1,51 @@
+:root { --green: #236b43; --green-dark: #174d30; --mint: #eaf4ec; --ink: #1f3026; --muted: #68776d; }
+* { box-sizing: border-box; }
+body { background: #f7f9f6; color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
+.portal-nav { background: var(--green-dark); box-shadow: 0 3px 14px rgba(14, 50, 29, .12); }
+.navbar-brand { letter-spacing: -.02em; }
+main { flex: 1; }
+footer { border-top: 1px solid #e4ebe4; background: #fbfcfa; }
+.btn-success { background-color: var(--green); border-color: var(--green); }
+.btn-success:hover { background-color: var(--green-dark); border-color: var(--green-dark); }
+a { color: var(--green); }
+.hero { background: linear-gradient(120deg, #edf6e9 0%, #f7f8ec 60%, #e2f0e2 100%); overflow: hidden; }
+.hero h1 { color: #173f29; letter-spacing: -.04em; }
+.hero .lead { max-width: 620px; color: #536a5a; }
+.eyebrow { color: var(--green); font-size: .72rem; font-weight: 800; letter-spacing: .14em; }
+.soil-illustration { position: relative; min-height: 300px; border-radius: 1.5rem; overflow: hidden; background: linear-gradient(#dff0d8, #f5f0d4); }
+.sun { position: absolute; width: 70px; height: 70px; border-radius: 50%; background: #f7d978; top: 28px; right: 35px; }
+.hill { position: absolute; bottom: 0; width: 130%; height: 170px; border-radius: 50% 50% 0 0; }
+.hill-one { left: -15%; background: #9fc28a; bottom: -45px; transform: rotate(-8deg); }
+.hill-two { right: -30%; background: #57895d; bottom: -95px; transform: rotate(8deg); }
+.plant { position: absolute; z-index: 2; font-size: 3rem; filter: drop-shadow(0 4px 2px #355b3220); }
+.plant-one { bottom: 75px; left: 18%; font-size: 3.5rem; }
+.plant-two { bottom: 55px; left: 48%; font-size: 4rem; }
+.plant-three { bottom: 70px; right: 13%; font-size: 3.2rem; }
+.soil-label { position: absolute; z-index: 3; bottom: 17px; left: 0; right: 0; text-align: center; color: white; font-weight: 700; text-shadow: 0 1px 4px #173f29; }
+.feature-card, .metric-card, .form-card, .auth-card { background: white; border: 1px solid #e7ede7; border-radius: 1.1rem; padding: 1.5rem; box-shadow: 0 8px 25px rgba(31, 65, 40, .04); }
+.feature-icon { width: 48px; height: 48px; display: grid; place-items: center; background: var(--mint); border-radius: 14px; font-size: 1.5rem; margin-bottom: 1rem; }
+.callout { background: #edf5e9; border: 1px solid #dcebd8; }
+.auth-wrap { display: flex; justify-content: center; padding: 1rem 0 3rem; }
+.auth-card { width: 100%; max-width: 500px; padding: clamp(1.5rem, 4vw, 2.5rem); }
+.form-card { padding: clamp(1.25rem, 3vw, 2rem); }
+.form-control, .form-select { border-color: #dce5dc; min-height: 44px; }
+.form-control:focus, .form-select:focus { border-color: #76a884; box-shadow: 0 0 0 .2rem #236b4315; }
+.metric-card { padding: 1.25rem 1.5rem; }
+.metric-number { font-size: 2rem; font-weight: 800; letter-spacing: -.04em; margin-top: .25rem; }
+.status-pill { display: inline-block; padding: .35rem .6rem; border-radius: 999px; background: #edf5e9; color: #285f3b; font-size: .78rem; font-weight: 700; white-space: nowrap; }
+.table > :not(caption) > * > * { padding-top: 1rem; padding-bottom: 1rem; }
+.table thead th { background: #f7faf6; color: #68776d; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+.empty-state { text-align: center; padding: 3rem 1rem; }
+.empty-state .feature-icon { margin-left: auto; margin-right: auto; }
+.report-paper { max-width: 980px; margin: 0 auto; background: #fff; padding: clamp(1.25rem, 4vw, 3rem); border: 1px solid #e1e8e1; border-radius: 1rem; box-shadow: 0 10px 30px rgba(31, 65, 40, .05); }
+.report-meta { background: #f7faf6; border-radius: .7rem; padding: .8rem 1rem; height: 100%; }
+.report-meta span { display: block; color: var(--muted); font-size: .78rem; margin-bottom: .2rem; }
+.report-meta strong { overflow-wrap: anywhere; }
+.report-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media print {
+  body { background: white; display: block; }
+  nav, footer, .report-toolbar, .alert-dismissible, .btn, .eyebrow + a { display: none !important; }
+  main { padding: 0 !important; margin: 0 !important; max-width: none !important; }
+  .report-paper { box-shadow: none; border: 0; border-radius: 0; padding: 0; max-width: none; }
+  .report-paper .alert { display: block !important; }
+}

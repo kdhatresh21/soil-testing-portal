@@ -1,0 +1,11 @@
+.env.*
+!.env.example
+*.sql
+.venv/
+__pycache__/
+*.py[cod]
+.env
+instance/
+.pytest_cache/
+
+!schema.sql
