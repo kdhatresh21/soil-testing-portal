@@ -75,13 +75,15 @@ DB_SSL_CA = os.getenv("DB_SSL_CA")
 
 if DB_SSL_CA:
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+        "pool_pre_ping": True,
+        "pool_recycle": 300,
         "connect_args": {
             "ssl": {"ca": DB_SSL_CA},
             "ssl_verify_cert": True,
             "ssl_verify_identity": True,
         }
     }
-
+    
 db = SQLAlchemy(app)
 app.jinja_env.globals["timedelta"] = timedelta
 
